@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 // import {Container, Card, CardContent,  TextField, Button} from '@mui/material';
 import './QRScanner.css';
 import QrReader from 'react-qr-reader';
@@ -12,6 +12,11 @@ function QRScanner() {
   console.log("username",username)
 
   const navigate = useNavigate();
+  useEffect(() => {
+    if(username === null){
+      navigate('/login')
+    }
+  }, []);
     const [text, setText] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [scanResultFile, setScanResultFile] = useState('');

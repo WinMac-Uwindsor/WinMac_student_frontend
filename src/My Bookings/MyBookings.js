@@ -1,13 +1,17 @@
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-
+import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function MyBookings() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const username = localStorage.getItem('username');
 
   console.log("username",username)
@@ -15,10 +19,15 @@ function MyBookings() {
   const [details, setDetails] = useState([]);
 
   useEffect(() => {
-    bookings(username);
-  },);
+    if(username === null){
+      navigate('/login')
+    }else{
+    bookings(username);}
+
+  },[]);
 
   function bookings(username){
+    setLoading(true);
     // First API call to get event IDs
     fetch("https://acservices-winmac.onrender.com/winmac/eventBook/myBookings", {
       method: "POST",
@@ -27,6 +36,7 @@ function MyBookings() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setLoading(false);
         console.log("Data.Data: " + data.data);
         console.log("Data.Data.length: " + data.data.length);
         // Array to store all the API call promises
@@ -34,6 +44,7 @@ function MyBookings() {
         // Loop over the event IDs and make API calls for each one
         data.data.forEach((eventId) => {
           console.log("eventID: " + eventId);
+          setLoading(true);
           const promise = fetch(
             "https://acservices-winmac.onrender.com/winmac/eventList/eventDetails",
             {
@@ -44,9 +55,11 @@ function MyBookings() {
           )
             .then((response) => response.json())
             .then((data) => {
+              setLoading(false);
               return data.data[0];
             })
             .catch((error) => {
+              setLoading(false);
               console.error(
                 `Error fetching data for event ${eventId}:`,
                 error
@@ -64,26 +77,38 @@ function MyBookings() {
         });
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error fetching event IDs:", error);
       });
   }
 
   function cancelBooking(id) {
+    setLoading(true);
     console.log("id: "+id+" type: "+typeof(id));
     axios
       .post("https://acservices-winmac.onrender.com/winmac/eventBook/removeEvent", {"username": username, "eventBooked": id})
       .then((response) => {
+        setLoading(false);
         console.log("cancel success",response.data);
         bookings();
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error canceling booking:", error);
       });
   }
   console.log("deatils length: " + details.length);
 
   return (
-    <div>
+    (loading)?<Box
+    sx={{
+      marginTop: 6,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <CircularProgress/></Box>:<div>
       <br/>
       {details.length > 0 &&
         details.map((item, index) => (

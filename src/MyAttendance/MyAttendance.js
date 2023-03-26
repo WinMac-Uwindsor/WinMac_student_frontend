@@ -5,7 +5,8 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 function MyAttendance() {
@@ -18,9 +19,19 @@ function MyAttendance() {
     navigate('/QRScanner');
   }
   const [details, setDetails] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    // First API call to get event IDs
+    if(username === null){
+      navigate('/login')
+    }else{
+      attendance(username);}
+
+  },[]);
+
+ 
+
+  function attendance (username){
+    setLoading(true);
     fetch("https://acservices-winmac.onrender.com/winmac/eventAttend/myAttendance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -28,12 +39,14 @@ function MyAttendance() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setLoading(false);
         console.log("Data.Data: " + data.data);
         console.log("Data.Data.length: " + data.data.length);
         // Array to store all the API call promises
         const promises = [];
         // Loop over the event IDs and make API calls for each one
         data.data.forEach((eventId) => {
+          setLoading(true);
           console.log("eventID: " + eventId);
           const promise = fetch(
             "https://acservices-winmac.onrender.com/winmac/eventList/eventDetails",
@@ -45,9 +58,11 @@ function MyAttendance() {
           )
             .then((response) => response.json())
             .then((data) => {
+              setLoading(false);
               return data.data[0];
             })
             .catch((error) => {
+              setLoading(false);
               console.error(
                 `Error fetching data for event ${eventId}:`,
                 error
@@ -65,13 +80,27 @@ function MyAttendance() {
         });
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error fetching event IDs:", error);
       });
-  },);
+
+  }
+
+
+  
 
   console.log("deatils length: " + details.length);
 
   return (
+    (loading)?<Box
+    sx={{
+      marginTop: 6,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <CircularProgress/></Box>:
     <div>
       <div>
                 <Button
@@ -83,8 +112,10 @@ function MyAttendance() {
                 </Button>
               </div>
       <br/>
+      
       {details.length > 0 &&
         details.map((item, index) => (
+          
           <Card sx={{ maxWidth: 700 }} className="event" key={index}>
             <CardHeader
               title={item.title}

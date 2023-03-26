@@ -1,164 +1,160 @@
-import React, { useState } from "react";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
-import { AppBar } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import { ListItemIcon } from "@mui/material";
+import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import { ListItemText } from "@mui/material";
-import Toolbar from "@mui/material/Toolbar";
-import BookIcon from "@mui/icons-material/Book";
-import Hidden from "@mui/material/Hidden";
-import EventIcon from "@mui/icons-material/Event";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 import uwinLogo from "./uwindsor_logo.png";
-import { useLocation } from "react-router-dom";
 
-import ContactPageIcon from "@mui/icons-material/ContactPage";
+const navLinks = [
+  { label: "DashBoard", to: "/" },
+  { label: "My bookings", to: "/my-bookings" },
+  {label :"Events", to: "/Events"},
+  { label: "Support", to: "/Support" },
+  { label: "My Attendance", to: "/MyAttendance" },
+];
 
-const Navbar = () => {
-  const location = useLocation();
+function Header() {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const [open, setOpen] = useState(false);
-  const showNavbar = location.pathname != "/";
-  const currentPage = location.pathname.substring(1); // remove the leading forward slash
-
-  const [name, setName] = useState(currentPage);
-
-  const toggleDrawer = (isOpen) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setOpen(isOpen);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
   };
 
-  const linkStyleHeaderNav = {
-    margin: "0 1rem",
-    textDecoration: "none",
-    color: "white",
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
-  const linkStyle = {
-    margin: "0 1rem",
-    textDecoration: "none",
-    color: "black",
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
+
+  // function handleLogout() {
+  //   // Make an API call to logout the user
+  //   fetch("/api/logout", {
+  //     method: "POST",
+  //     credentials: "include",
+  //   })
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         // Clear user session and redirect to login page
+  //         sessionStorage.clear();
+  //         window.location.href = "/login";
+  //       } else {
+  //         throw new Error("Logout failed.");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }
+
+  function handleLogout() {
+    // Clear user session and redirect to login page
+    localStorage.clear();
+    window.location.href = "/login";
+  }
+  
 
   const img = {
     maxWidth: "100%",
     height: "auto",
     width: "auto",
   };
-  return (
-    <div>
-      {showNavbar && (
-        <>
-          <AppBar position="static" sx={{ bgcolor: "ButtonText" }}>
-            <Toolbar>
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                onClick={toggleDrawer(true)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <div style={img}>
-                <img
-                  src={uwinLogo}
-                  alt="Logo"
-                  style={{ height: "40px", marginRight: "16px" }}
-                />
-              </div>
-              <Hidden smDown>
-                <Typography style={linkStyleHeaderNav} variant="h6">
-                  {name}
-                </Typography>
-              </Hidden>
-            </Toolbar>
-          </AppBar>
-          <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
-            <div
-              role="presentation"
-              onClick={toggleDrawer(false)}
-              onKeyDown={toggleDrawer(false)}
-            >
-              <List>
-                <Link
-                  to="/DashBoard"
-                  style={linkStyle}
-                  onClick={() => setName("DashBoard")}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="DashBoard" />
-                  </ListItem>
-                </Link>
-                <Link
-                  to="/mybooking"
-                  style={linkStyle}
-                  onClick={() => setName("My Booking")}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <BookIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="My Booking" />
-                  </ListItem>
-                </Link>
-                <Link
-                  to="/Events"
-                  style={linkStyle}
-                  onClick={() => setName("Event")}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <EventIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Event" />
-                  </ListItem>
-                </Link>
-                <Link
-                  to="/Support"
-                  style={linkStyle}
-                  onClick={() => setName("Support")}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <ContactPageIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Support" />
-                  </ListItem>
-                </Link>
-                <Link
-                  to="/MyAttendance"
-                  style={linkStyle}
-                  onClick={() => setName("Attendance")}
-                >
-                  <ListItem button>
-                    <ListItemIcon>
-                      <AccountBoxIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Attendance" />
-                  </ListItem>
-                </Link>
-              </List>
-            </div>
-          </Drawer>
-        </>
-      )}
-    </div>
-  );
-};
 
-export default Navbar;
+  return (
+    <AppBar position="static" sx={{ backgroundColor: "black" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            <div style={img}>
+              <img
+                src={uwinLogo}
+                alt="Logo"
+                style={{ height: "40px", marginRight: "16px" }}
+              />
+            </div>{" "}
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+            >
+              {navLinks.map((link) => (
+                <MenuItem key={link.label}>
+                  <Link
+                    to={link.to}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {link.label}
+                  </Link>
+                </MenuItem>
+              ))}
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {navLinks.map((link) => (
+              <Button
+                key={link.label}
+                component={Link}
+                to={link.to}
+                color="inherit"
+              >
+                {link.label}
+              </Button>
+            ))}
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
+
+export default Header;
+

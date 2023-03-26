@@ -8,8 +8,11 @@ import axios from "axios";
 import Typography from "@mui/material/Typography";
 import React, { useState, useEffect } from "react";
 import { useRef } from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Complaints() {
+  const [loading,setLoading] = useState(false);
   const username = localStorage.getItem('username');
 
   console.log("username",username)
@@ -18,12 +21,13 @@ export default function Complaints() {
 
   useEffect(() => {
     getComplsints();
-  },);
+  },[]);
 
   const complaintRef = useRef(null);
   const [complaint, setComplaint] = useState("");
 
   function getComplsints() {
+    setLoading(true);
     fetch("https://acservices-winmac.onrender.com/winmac/support/myTickets", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,16 +35,19 @@ export default function Complaints() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setLoading(false);
         console.log("Length send by server: " + data.data.length);
         setDetails(data.data);
       })
       .catch((error) => {
+        setLoading(false);
         console.error(`Error fetching data for event ${username}:`, error);
         return null;
       });
   }
 
   function handleFormSubmit(event) {
+    setLoading(true);
     event.preventDefault();
     const complaintField = document.querySelector("#complaint-field");
     const complaintMessage = complaintField.value;
@@ -52,25 +59,30 @@ export default function Complaints() {
         message: complaintMessage,
       })
       .then((response) => {
+        setLoading(false);
         console.log("complaint adding success", response.data);
         getComplsints();
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error adding complaint:", error);
       });
   }
 
   function deleteComplaint(id) {
     console.log("id: " + id);
+    setLoading(true);
     axios
       .post("https://acservices-winmac.onrender.com/winmac/support/deleteTicket", {
         event_id: id,
       })
       .then((response) => {
+        setLoading(false);
         console.log("cancel success", response.data);
         getComplsints();
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error canceling booking:", error);
       });
   }
@@ -79,6 +91,15 @@ export default function Complaints() {
   console.log("Details: " + details);
 
   return (
+    (loading)?<Box
+    sx={{
+      marginTop: 6,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <CircularProgress/></Box>:
     <div>
       <br />
       <form className="form" onSubmit={handleFormSubmit}>

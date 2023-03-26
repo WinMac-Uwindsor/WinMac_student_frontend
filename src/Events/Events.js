@@ -4,38 +4,53 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import React, { useState, useEffect } from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const Events = (props) => {
+  const [loading, setLoading] = useState(false);
   const username = localStorage.getItem('username');
+  const navigate = useNavigate();
 
   console.log("username",username)
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    list();
+    if(username === null){
+      navigate('/login')
+    }
+    else{
+    list();}
   }, []);
 
   function list(){
+    setLoading(true);
     axios.get("https://acservices-winmac.onrender.com/winmac/eventList").then((response) => {
       setData(response.data);
+      setLoading(false);
       console.log(response.data);
     });
   }
   function book(id,username) {
     console.log("id: "+id+" type: "+typeof(id));
+    setLoading(true);
     axios
       .post("https://acservices-winmac.onrender.com/winmac/eventBook/book", {"username": username, "eventBooked": id})
       .then((response) => {
         console.log("cancel success",response.data);
         list();
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error canceling booking:", error);
       });
   }
@@ -43,7 +58,15 @@ const Events = (props) => {
   console.log("data: ", data.data);
 
   return (
-    <div>
+    (loading)?<Box
+    sx={{
+      marginTop: 6,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
+    <CircularProgress/></Box>:<div>
       <br/> 
       {data.length > 0 &&
         data.data.map((item, index) => (

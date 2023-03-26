@@ -9,11 +9,18 @@ import Button from "@mui/material/Button";
 import { indigo } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import { bgcolor } from "@mui/system";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 
 function DashBoard() {
   const username = localStorage.getItem('username');
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(username === null){
+      navigate('/login')
+    }
+  }, []);
 
   console.log("username",username)
 
