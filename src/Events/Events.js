@@ -12,6 +12,8 @@ import Typography from "@mui/material/Typography";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { handleAlertDialog } from "../constants";
+
 
 
 const Events = (props) => {
@@ -37,6 +39,10 @@ const Events = (props) => {
       setData(response.data);
       setLoading(false);
       console.log(response.data);
+    }).catch((error) => {
+      setLoading(false);
+      handleAlertDialog(error);
+      console.error("Error canceling booking:", error);
     });
   }
   function book(id,username) {
@@ -51,6 +57,7 @@ const Events = (props) => {
       })
       .catch((error) => {
         setLoading(false);
+        handleAlertDialog(error);
         console.error("Error canceling booking:", error);
       });
   }

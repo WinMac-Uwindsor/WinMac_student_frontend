@@ -4,6 +4,8 @@ import './QRScanner.css';
 import QrReader from 'react-qr-reader';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { handleAlertDialog } from "../constants";
+
 
 
 function QRScanner() { 

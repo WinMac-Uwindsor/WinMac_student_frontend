@@ -7,6 +7,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
+import { handleAlertDialog } from "../constants";
+
 
 
 function MyAttendance() {
@@ -35,7 +37,7 @@ function MyAttendance() {
     fetch("https://acservices-winmac.onrender.com/winmac/eventAttend/myAttendance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: username }),
+      body: JSON.stringify({ username: "chauha45" }),
     })
       .then((response) => response.json())
       .then((data) => {

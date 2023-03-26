@@ -8,8 +8,10 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { handleAlertDialog } from "../constants";
 
-function MyBookings() {
+
+function MyBookings(e) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const username = localStorage.getItem('username');
@@ -22,29 +24,31 @@ function MyBookings() {
     if(username === null){
       navigate('/login')
     }else{
+      console.log(" hello");
     bookings(username);}
 
   },[]);
 
   function bookings(username){
-    setLoading(true);
+    // setLoading(true);
     // First API call to get event IDs
     fetch("https://acservices-winmac.onrender.com/winmac/eventBook/myBookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username }),
     })
-      .then((response) => response.json())
+      .then((response) => {response.json(); console.log("response of bookings is :"+response.json)})
       .then((data) => {
-        setLoading(false);
+        
         console.log("Data.Data: " + data.data);
         console.log("Data.Data.length: " + data.data.length);
         // Array to store all the API call promises
         const promises = [];
+        
         // Loop over the event IDs and make API calls for each one
         data.data.forEach((eventId) => {
           console.log("eventID: " + eventId);
-          setLoading(true);
+          // setLoading(true);
           const promise = fetch(
             "https://acservices-winmac.onrender.com/winmac/eventList/eventDetails",
             {
@@ -55,7 +59,7 @@ function MyBookings() {
           )
             .then((response) => response.json())
             .then((data) => {
-              setLoading(false);
+              // setLoading(false);
               return data.data[0];
             })
             .catch((error) => {
@@ -64,6 +68,8 @@ function MyBookings() {
                 `Error fetching data for event ${eventId}:`,
                 error
               );
+              
+              handleAlertDialog(`Error fetching data for event ${eventId}:`+ error);
               return null;
             });
           promises.push(promise);
@@ -75,25 +81,27 @@ function MyBookings() {
           // Update the details state with the new data
           setDetails(filteredDetails);
         });
+        // setLoading(false);
       })
       .catch((error) => {
-        setLoading(false);
+        // setLoading(false);
         console.error("Error fetching event IDs:", error);
       });
   }
 
   function cancelBooking(id) {
-    setLoading(true);
+    // setLoading(true);
     console.log("id: "+id+" type: "+typeof(id));
     axios
       .post("https://acservices-winmac.onrender.com/winmac/eventBook/removeEvent", {"username": username, "eventBooked": id})
       .then((response) => {
-        setLoading(false);
+       
         console.log("cancel success",response.data);
         bookings();
+        // setLoading(false);
       })
       .catch((error) => {
-        setLoading(false);
+        // setLoading(false);
         console.error("Error canceling booking:", error);
       });
   }
