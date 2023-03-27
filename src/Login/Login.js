@@ -9,9 +9,12 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { handleAlertDialog } from "../constants";
 
 
 export default function Login() {
+  
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -45,9 +48,11 @@ export default function Login() {
       }
       else{
         console.log("Error logging-in",response.data);
+        handleAlertDialog(response.data['error']);
       }
     })
     .catch((error) => {
+      handleAlertDialog(error);
       console.error("Error loggin in:", error);
     });
   }
