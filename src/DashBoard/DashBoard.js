@@ -54,7 +54,7 @@ function DashBoard() {
       const red = Math.floor(Math.random() * 256);
       const green = Math.floor(Math.random() * 256);
       const blue = Math.floor(Math.random() * 256);
-      colors.push(`rgba(${red}, ${green}, ${blue}, 0.2)`);
+      colors.push(`rgba(${red}, ${green}, ${blue}, 0.7)`);
     }
     return colors;
   }
@@ -116,12 +116,29 @@ function DashBoard() {
       },
     ],
   };
+  const topCompaniesData = {
+    labels: topCompaniesByStudents.map((e) =>
+      e.Company
+        
+    ),
+    datasets: [
+      {
+        label: "",
+        backgroundColor: getRandomColors(topCompaniesByStudents.length),
+        borderColor: "rgb(255, 99, 132)",
+        data: topCompaniesByStudents.map((e) => e.num_students),
+        fill: true,
+      },
+    ],
+  };
   
 
   console.log("username",username)
 
   return (
     <>
+
+      <h1>Welcome {username}</h1>
       <Box
         sx={{
           display: "grid",
@@ -130,15 +147,19 @@ function DashBoard() {
           justifyContent: "center",
         }}
       >
+        <h1>Count By Roles </h1>
         <Item>
           <Bar data={countByRolesData} />
         </Item>
        
-
+        <h1>No. of Students Placed in different Companies </h1>
         <Item>
           <Doughnut data={data} />
         </Item>
-        
+        <h1>Job Offers by Top Companies</h1>
+        <Item>
+          <Line data={topCompaniesData} />
+        </Item>
       </Box>
       {/* <Pie data={data} /> */}
       {/* <div className="rowC"> */}
@@ -156,6 +177,8 @@ function DashBoard() {
 <Bar data={data} />
 </Box> */}
       {/* </div> */}
+
+      <h1 style={{ paddingLeft: '50px' }}>Skills Required for Specific Job Roles</h1>
       <TableContainer component={Paper} sx={{padding:"50px" , borderRadius:"20px"}}>
         <Table>
           <TableHead>
@@ -183,6 +206,7 @@ function DashBoard() {
           </TableBody>
         </Table>
       </TableContainer>
+      
      
      
     </>

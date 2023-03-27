@@ -9,21 +9,20 @@ import Typography from "@mui/material/Typography";
 import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import Box from "@mui/material/Box";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { handleAlertDialog } from "../constants";
 
-
 export default function Complaints() {
-  const [loading,setLoading] = useState(false);
-  const username = localStorage.getItem('username');
+  const [loading, setLoading] = useState(false);
+  const username = localStorage.getItem("username");
 
-  console.log("username",username)
+  console.log("username", username);
 
   const [details, setDetails] = useState([]);
 
   useEffect(() => {
     getComplsints();
-  },[]);
+  }, []);
 
   const complaintRef = useRef(null);
   const [complaint, setComplaint] = useState("");
@@ -75,9 +74,12 @@ export default function Complaints() {
     console.log("id: " + id);
     setLoading(true);
     axios
-      .post("https://acservices-winmac.onrender.com/winmac/support/deleteTicket", {
-        event_id: id,
-      })
+      .post(
+        "https://acservices-winmac.onrender.com/winmac/support/deleteTicket",
+        {
+          event_id: id,
+        }
+      )
       .then((response) => {
         setLoading(false);
         console.log("cancel success", response.data);
@@ -92,16 +94,18 @@ export default function Complaints() {
   console.log("length: " + details.length);
   console.log("Details: " + details);
 
-  return (
-    (loading)?<Box
-    sx={{
-      marginTop: 6,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    }}
-  >
-    <CircularProgress/></Box>:
+  return loading ? (
+    <Box
+      sx={{
+        marginTop: 6,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <div>
       <br />
       <form className="form" onSubmit={handleFormSubmit}>
@@ -114,33 +118,115 @@ export default function Complaints() {
           multiline
           required
         />
-        <Button type="submit" variant="contained" color="primary" sx={{backgroundColor : "black"}}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ backgroundColor: "black" }}
+        >
           Submit
         </Button>
       </form>
       <br />
       <br />
-      {details.length > 0 &&
-        details.map((item, index) => (
-          <Card sx={{ maxWidth: 700 }} className="event" key={index}>
-            <CardHeader subheader={"Ticket No.: " + item._id} />
-            <CardContent>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        {details.length > 0 &&
+          details.map((item, index) => (
+            <Card
+              key={index}
+              sx={{
+                width: "50%",
+                bgcolor: "#fff",
+                my: 2,
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.5)",
+                borderRadius: "10px",
+                overflow: "hidden",
+                position: "relative",
+                border: "1px solid #000000",
+                minHeight: "23vh",
+              }}
+            >
+              {" "}
+              {/* <CardHeader subheader={"Ticket No.: " + item._id} /> */}
+              <CardContent
+                sx={{
+                  padding: "1.5rem",
+                  backgroundImage: "white",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#333",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <span sx={{ fontWeight: "bold" }}>Ticket No:</span>{" "}
+                  {item._id}
+                </Typography>
+                {/* <CardContent>
               <Typography variant="body2" color="text.secondary">
                 {"Complaint: " + item.message}
               </Typography>
-            </CardContent>{" "}
-            <div>
-              <Button
+            </CardContent>{" "} */}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#333",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <span sx={{ fontWeight: "bold" }}>Complaint:</span>{" "}
+                  {item.message}
+                </Typography>
+                {/* <Button
                 onClick={() => deleteComplaint(item._id)}
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Cancel
-              </Button>
-            </div>
-          </Card>
-        ))}
+              </Button> */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    bgcolor: "black",
+                    height: "60px",
+                    position: "absolute",
+                    bottom: "0",
+                    left: "0",
+                    right: "0",
+                    px: "1.5rem",
+                  }}
+                >
+                  <Button
+                    onClick={() => deleteComplaint(item._id)}
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                      color: "&:hover" ? "black" : "inherit",
+                      backgroundColor: "&:hover" ? "white" : "transparent",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+      </div>
     </div>
   );
 }

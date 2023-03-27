@@ -34,8 +34,14 @@ function QRScanner() {
           setScanResultWebCam(result);
           console.log(result);
           Attend(result);
+          sleep(1000);
       }
      }
+
+     
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
      function Attend(id) {
       console.log("id: "+id+" type: "+typeof(id));
