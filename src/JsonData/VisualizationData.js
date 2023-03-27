@@ -293,110 +293,18 @@ export const studentsPlaced = [
 ];
 
 export const topCompaniesByStudents = [
-  {
-    "BDO Canada LLP": {
-      "Full-stack Developer": 2,
-      "Quality/Business Analyst": 1,
-      "Software Engineer": 2,
-      "UI/UX Design Analyst": 1,
-    },
-    BMO: {
-      "Application Engineer": 1,
-      "Big Data": 1,
-      "Business System Analyst": 1,
-      "Project Management": 1,
-      "Quality Assurance Analyst": 1,
-    },
-    "Bell Canada": {
-      "Software Developer": 1,
-    },
-    BlackBerry: {
-      "Android Software Developer": 1,
-      "Application Engineer": 1,
-      "Automation Test Development": 1,
-      "Cyber Security Compliance Analyst": 1,
-      "Release Engineer": 1,
-      "Salesforce Developer": 1,
-      "Software Automation Developer": 1,
-      "Software Developer": 10,
-      "Software Engineer": 1,
-      "Software Test Specialist": 1,
-      "System Software Developer": 1,
-    },
-    CIBC: {
-      "AML Consultant": 1,
-      "Data Science Developer": 1,
-      "Innovation engineer": 1,
-      "Junior Application Developer": 2,
-      "Production Application Support Analyst": 1,
-    },
-    Caseware: {
-      "Software Developer": 1,
-    },
-    Ceridian: {
-      "Software Developer": 1,
-    },
-    "Healthcare Ontario Pension": {
-      "Data Scientist": 1,
-    },
-    IBM: {
-      "DevOps Engineer": 1,
-      "Software Engineer": 1,
-    },
-    "Loblaws Companies Ltd": {
-      "Data Scientist": 1,
-    },
-    Nokia: {
-      "Project Management": 1,
-      "Robotic Process Automation Engineer": 1,
-      "Software Developer": 4,
-    },
-    Nuance: {
-      "Data Scientist": 1,
-    },
-    RBC: {
-      "Business System Analyst": 2,
-      "Capital Markets": 2,
-      "Cyber Security": 1,
-      "Data Analyst Intern": 1,
-      "DevOps Engineer": 1,
-      "Operation analyst": 1,
-      "Quality Engineering": 1,
-      "Software Developer": 8,
-    },
-    "Rocket Innovation Studio": {
-      "Software Developer": 1,
-    },
-    SOTI: {
-      "Performance Test Engineer": 3,
-      "Quality Assurance Specialist": 5,
-      "Software Developer": 5,
-    },
-    ScotiaBank: {
-      "Data Scientist": 1,
-      "Project Management": 1,
-      "Software Engineer": 2,
-    },
-    Softchoice: {
-      "Managed Service Case Analyst": 2,
-      "Workplace Solutions": 1,
-    },
-    Sunlife: {
-      "Associate Software Engineer": 1,
-    },
-    "TD Bank": {
-      "Business System Analyst": 2,
-      "Data Analyst": 1,
-      "Data Analyst": 2,
-      "Data Analyst Intern/Co-op": 37,
-      "Quality Engineer": 1,
-      "Software Engineer": 1,
-    },
-    Teqfocus: {
-      "Salesforce Developer Intern": 1,
-    },
-  },
+  { Company: "TD Bank", num_students: 44 },
+  { Company: "BlackBerry", num_students: 20 },
+  { Company: "RBC", num_students: 17 },
+  { Company: "SOTI", num_students: 13 },
+  { Company: "BDO Canada LLP", num_students: 6 },
+  { Company: "CIBC", num_students: 6 },
+  { Company: "Nokia", num_students: 6 },
+  { Company: "BMO", num_students: 5 },
+  { Company: "ScotiaBank", num_students: 4 },
+  { Company: "Softchoice", num_students: 3 },
 ];
+
 export const countByRoles = [
   { job_titles: "Data Analyst Intern/Co-op", company: 37 },
   { job_titles: "Software Developer", company: 31 },

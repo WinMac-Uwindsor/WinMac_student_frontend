@@ -1,0 +1,14 @@
+.sendExcelData{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.rowC{display:flex; flex-direction:row;}
+.dash {
+    display: flex;
+    
+    align-items: center;
+  }
