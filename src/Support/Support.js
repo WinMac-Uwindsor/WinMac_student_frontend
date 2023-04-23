@@ -41,6 +41,7 @@ export default function Complaints() {
         setDetails(data.data);
       })
       .catch((error) => {
+        details.length=0;
         setLoading(false);
         console.error(`Error fetching data for event ${username}:`, error);
         return null;

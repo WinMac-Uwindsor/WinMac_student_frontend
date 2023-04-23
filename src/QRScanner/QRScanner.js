@@ -9,6 +9,7 @@ import { handleAlertDialog } from "../constants";
 
 
 function QRScanner() { 
+  var o=0;
   const username = localStorage.getItem('username');
 
   console.log("username",username)
@@ -29,11 +30,21 @@ function QRScanner() {
     const handleErrorWebCam = (error) => {
       console.log(error);
     }
+
+    function web(){
+      if(o===0){
+        handleScanWebCam();
+        o=1;
+      }
+    }
     const handleScanWebCam = (result) => {
       if (result){
+        
           setScanResultWebCam(result);
           console.log(result);
           Attend(result);
+          navigate('/MyAttendance');
+           
           sleep(1000);
       }
      }
@@ -49,7 +60,6 @@ function QRScanner() {
         .post("https://acservices-winmac.onrender.com/winmac/eventAttend/attended", {"username": username, "eventAttended": id})
         .then((response) => {
           console.log("Event Attended",response.data);
-          navigate('/MyAttendance');
         })
         .catch((error) => {
           console.error("Error updating attendance:", error);
@@ -89,7 +99,8 @@ function QRScanner() {
                          delay={300}
                          style={{width: '70%'}}
                          onError={handleErrorWebCam}
-                         onScan={handleScanWebCam}
+                         
+                         onScan={web()}
                          />
                          {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
                  </div>
