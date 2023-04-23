@@ -8,8 +8,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box } from "@mui/system";
 import BlueCard from "../constants";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 function MyBookings() {
+  const [loading, setLoading] = useState(false);
+
   const username = localStorage.getItem('username');
 
   console.log("username",username)
@@ -21,14 +25,17 @@ function MyBookings() {
   },[]);
 
   function bookings(username){
+    setLoading(true);
     // First API call to get event IDs
     fetch("https://acservices-winmac.onrender.com/winmac/eventBook/myBookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username }),
     })
-      .then((response) => response.json())
+      .then((response) =>
+        response.json())
       .then((data) => {
+        setLoading(false);
         console.log("Data.Data: " + data.data);
         console.log("Data.Data.length: " + data.data.length);
         // Array to store all the API call promises
@@ -46,9 +53,11 @@ function MyBookings() {
           )
             .then((response) => response.json())
             .then((data) => {
+              setLoading(false);
               return data.data[0];
             })
             .catch((error) => {
+              setLoading(false);
               console.error(
                 `Error fetching data for event ${eventId}:`,
                 error
@@ -71,21 +80,35 @@ function MyBookings() {
   }
 
   function cancelBooking(id) {
+    setLoading(true);
     console.log("id: "+id+" type: "+typeof(id));
     axios
       .post("https://acservices-winmac.onrender.com/winmac/eventBook/removeEvent", {"username": username, "eventBooked": id})
       .then((response) => {
+        
         console.log("cancel success",response.data);
         bookings(username);
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error canceling booking:", error);
       });
   }
   console.log("deatils length: " + details.length);
 
 
-  return (
+  return loading ? (
+    <Box
+      sx={{
+        marginTop: 6,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
     <div>
       <br/>
       <div

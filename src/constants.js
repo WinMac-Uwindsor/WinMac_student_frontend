@@ -21,3 +21,6 @@ export const handleAlertDialog = (message) => {
   };
   
   export default BlueCard;
+
+
+  
